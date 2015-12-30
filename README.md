@@ -20,7 +20,7 @@ SwipePager is UIPageViewController wrapper like Gunosy, SmartNews UI.
 # Requirements
 
 - iOS8 and up
-- Swift 1.1
+- Swift 2.1
 - XCode 6.2
 
 # Installation
@@ -30,7 +30,7 @@ SwipePager is UIPageViewController wrapper like Gunosy, SmartNews UI.
 add the following line to your Podfile:
 
 ```ruby
-pod 'SwipePager'
+pod 'SwipePager', :git => 'https://github.com/mduplifting/SwipePager.git'
 ```
 
 and import

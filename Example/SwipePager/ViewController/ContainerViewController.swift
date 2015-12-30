@@ -44,7 +44,7 @@ class ContainerViewController: UIViewController, SwipePagerDataSource, SwipePage
             0,
             ORIGIN_Y,
             CGRectGetWidth(self.view.frame),
-            CGRectGetHeight(self.view.frame)
+            CGRectGetHeight(self.view.frame) - ORIGIN_Y
         )
         
         let swipePager = SwipePager(frame: frame, transitionStyle: .Scroll)
@@ -61,15 +61,15 @@ class ContainerViewController: UIViewController, SwipePagerDataSource, SwipePage
     
     // MARK: - SwipePagerDataSource
     
-    func sizeForMenu(#swipePager: SwipePager) -> CGSize {
+    func sizeForMenu(swipePager swipePager: SwipePager) -> CGSize {
         return CGSizeMake(80, 50)
     }
     
-    func menuViews(#swipePager: SwipePager) -> [SwipePagerMenu] {
+    func menuViews(swipePager swipePager: SwipePager) -> [SwipePagerMenu] {
         var array: [SwipePagerMenu] = []
         
         for var i = 0; i < 8; i++ {
-            var menu = SwipePagerMenu()
+            let menu = SwipePagerMenu()
             menu.stateNormalColor = UIColor.lightGrayColor()
             menu.stateNormalFontColor = UIColor.whiteColor()
             menu.stateHighlightColor = UIColor.blackColor()
@@ -88,12 +88,12 @@ class ContainerViewController: UIViewController, SwipePagerDataSource, SwipePage
         return array
     }
     
-    func viewControllers(#swipePager: SwipePager) -> [UIViewController] {
+    func viewControllers(swipePager swipePager: SwipePager) -> [UIViewController] {
         var array: [UIViewController] = []
         
         for var i = 0; i < 8; i++ {
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let feedViewController = storyBoard.instantiateViewControllerWithIdentifier("FeedViewController") as FeedViewController
+            let feedViewController = storyBoard.instantiateViewControllerWithIdentifier("FeedViewController") as! FeedViewController
             feedViewController.row = i
             array.append(feedViewController)
         }
@@ -103,8 +103,8 @@ class ContainerViewController: UIViewController, SwipePagerDataSource, SwipePage
     
     // MARK: - SwipePagerDelegate
     
-    func swipePager(#swipePager: SwipePager, didMoveToPage page: Int) {
-        println("move to :" + page.description)
+    func swipePager(swipePager swipePager: SwipePager, didMoveToPage page: Int) {
+        print("move to :" + page.description)
     }
 
     /*

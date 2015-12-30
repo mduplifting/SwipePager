@@ -52,50 +52,35 @@ public class SwipePagerMenu: UIView {
     
     // MARK: - LifeCycle
     
-    override required public init() {
-        super.init(frame: CGRectZero)
+    required public init() {
+        super.init(frame: CGRect.zero)
         self.titelLabel = UILabel()
         self.titelLabel.backgroundColor = UIColor.clearColor()
         self.titelLabel.textAlignment = .Center
         self.addSubview(self.titelLabel)
     }
 
-    required public init(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Public
     
     func config() {
-        if let title = self.title {
-            self.titelLabel.text = title
-        }
-        
-        if let font = self.font {
-            self.titelLabel.font = font
-        }
-        
+		self.titelLabel.text = self.title
+		self.titelLabel.font = self.font
         self.stateNormal()
     }
     
     func stateNormal() {
-        if let color = self.stateNormalColor {
-            self.backgroundColor = color
-        }
-        
-        if let color = self.stateNormalFontColor {
-            self.titelLabel.textColor = color
-        }
+		self.backgroundColor = self.stateNormalColor
+		self.titelLabel.textColor = self.stateNormalFontColor
     }
     
     func stateHighlight() {
-        if let color = self.stateHighlightColor {
-            self.backgroundColor = color
-        }
-        
-        if let color = self.stateHighlightFontColor {
-            self.titelLabel.textColor = color
-        }
+        self.backgroundColor = self.stateHighlightColor
+        self.titelLabel.textColor = self.stateHighlightFontColor
     }
     
     /*

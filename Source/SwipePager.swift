@@ -224,7 +224,7 @@ UIPageViewControllerDelegate {
 		}
 	}
 
-	func selectViewControllerAtIndex(index: Int, animated: Bool = false) {
+	public func selectViewControllerAtIndex(index: Int, animated: Bool = false) {
 		self.pageViewController.setViewControllers(
 			[self.viewControllers[index]],
 			direction: index > self.currentIndex ? .Forward : .Reverse,

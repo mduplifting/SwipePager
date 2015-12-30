@@ -41,11 +41,11 @@ public class SwipePagerMenu: UIView {
     
     override public var frame: CGRect {
         didSet {
-            self.titelLabel.frame = CGRectMake(
-                0,
-                0,
-                CGRectGetWidth(self.frame),
-                CGRectGetHeight(self.frame)
+            self.titelLabel.frame = CGRect(
+				x:		0,
+				y:		0,
+				width:	CGRectGetWidth(self.frame),
+				height: CGRectGetHeight(self.frame)
             )
         }
     }

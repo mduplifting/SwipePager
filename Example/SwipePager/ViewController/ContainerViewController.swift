@@ -52,6 +52,14 @@ class ContainerViewController: UIViewController, SwipePagerDataSource, SwipePage
         swipePager.delegate = self
         self.view.addSubview(swipePager)
         swipePager.reloadData()
+
+		swipePager.selectViewControllerAtIndex(5)
+
+		let delay = 1 * Double(NSEC_PER_SEC)
+		let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+		dispatch_after(delayTime, dispatch_get_main_queue()) {
+			swipePager.selectViewControllerAtIndex(Int(arc4random_uniform(8)), animated: true)
+		}
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,11 +69,11 @@ class ContainerViewController: UIViewController, SwipePagerDataSource, SwipePage
     
     // MARK: - SwipePagerDataSource
     
-    func sizeForMenu(swipePager swipePager: SwipePager) -> CGSize {
+    func sizeForMenu(swipePager: SwipePager) -> CGSize {
         return CGSizeMake(80, 50)
     }
     
-    func menuViews(swipePager swipePager: SwipePager) -> [SwipePagerMenu] {
+    func menuViews(swipePager: SwipePager) -> [SwipePagerMenu] {
         var array: [SwipePagerMenu] = []
         
         for var i = 0; i < 8; i++ {
@@ -88,7 +96,7 @@ class ContainerViewController: UIViewController, SwipePagerDataSource, SwipePage
         return array
     }
     
-    func viewControllers(swipePager swipePager: SwipePager) -> [UIViewController] {
+    func viewControllers(swipePager: SwipePager) -> [UIViewController] {
         var array: [UIViewController] = []
         
         for var i = 0; i < 8; i++ {
@@ -103,7 +111,7 @@ class ContainerViewController: UIViewController, SwipePagerDataSource, SwipePage
     
     // MARK: - SwipePagerDelegate
     
-    func swipePager(swipePager swipePager: SwipePager, didMoveToPage page: Int) {
+    func swipePager(swipePager: SwipePager, didMoveToPage page: Int) {
         print("move to :" + page.description)
     }
 

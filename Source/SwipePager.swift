@@ -32,13 +32,13 @@ public enum SwipePagerPosition {
 }
 
 public protocol SwipePagerDataSource: class {
-	func sizeForMenu(swipePager swipePager: SwipePager) -> CGSize
-	func menuViews(swipePager swipePager: SwipePager) -> [SwipePagerMenu]
-	func viewControllers(swipePager swipePager: SwipePager) -> [UIViewController]
+	func sizeForMenu(swipePager: SwipePager) -> CGSize
+	func menuViews(swipePager: SwipePager) -> [SwipePagerMenu]
+	func viewControllers(swipePager: SwipePager) -> [UIViewController]
 }
 
 public protocol SwipePagerDelegate: class {
-	func swipePager(swipePager swipePager: SwipePager, didMoveToPage page: Int)
+	func swipePager(swipePager: SwipePager, didMoveToPage page: Int)
 }
 
 public class SwipePager: UIView, UIPageViewControllerDataSource,
@@ -62,7 +62,8 @@ UIPageViewControllerDelegate {
 
 	// MARK: - LifeCycle
 
-	required public init(frame: CGRect, transitionStyle: UIPageViewControllerTransitionStyle, menuPosition: SwipePagerPosition = .Bottom) {
+	required public init(frame: CGRect, transitionStyle: UIPageViewControllerTransitionStyle,
+		menuPosition: SwipePagerPosition = .Top) {
 		super.init(frame: frame)
 		self.transitionStyle = transitionStyle
 		self.menuPosition = menuPosition
@@ -102,7 +103,7 @@ UIPageViewControllerDelegate {
 	}
 
 	private func menuScrollViewReloadData() {
-		if let menuSize = self.dataSource?.sizeForMenu(swipePager: self) {
+		if let menuSize = self.dataSource?.sizeForMenu(self) {
 			self.menuSize = menuSize
 		}
 
@@ -128,7 +129,7 @@ UIPageViewControllerDelegate {
 	private func layoutMenuScrollView(currentPage currentPage: Int) {
 		var index = 0
 
-		if let menuViewArray = self.dataSource?.menuViews(swipePager: self) {
+		if let menuViewArray = self.dataSource?.menuViews(self) {
 
 			self.menuViewArray = menuViewArray
 
@@ -182,13 +183,13 @@ UIPageViewControllerDelegate {
 			}
 		}
 
-		if let viewControllerArray = self.dataSource?.viewControllers(swipePager: self) {
+		if let viewControllerArray = self.dataSource?.viewControllers(self) {
 			self.viewControllers = viewControllerArray
 			if self.viewControllers.count > 0 {
 				self.pageViewController.setViewControllers(
 					[self.viewControllers[self.currentPage]],
 					direction: .Forward,
-					animated: true,
+					animated: false,
 					completion: nil
 				)
 			}
@@ -223,7 +224,17 @@ UIPageViewControllerDelegate {
 		}
 	}
 
-	private func moveMenuScrollViewToCurrentIndex(index: Int) {
+	func selectViewControllerAtIndex(index: Int, animated: Bool = false) {
+		self.pageViewController.setViewControllers(
+			[self.viewControllers[index]],
+			direction: index > self.currentIndex ? .Forward : .Reverse,
+			animated: animated,
+			completion: nil
+		)
+		self.moveMenuScrollViewToCurrentIndex(index, animated: animated)
+	}
+
+	private func moveMenuScrollViewToCurrentIndex(index: Int, animated: Bool = true) {
 		let frame = CGRect(
 			x: CGFloat(index) * self.menuSize.width + self.menuSize.width * 0.5
 				- (CGRectGetWidth(self.frame) * 0.5), // TODO: Confirmation
@@ -231,7 +242,7 @@ UIPageViewControllerDelegate {
 			width: CGRectGetWidth(self.menuScrollView.frame),
 			height: CGRectGetHeight(self.menuScrollView.frame)
 		)
-		self.menuScrollView.scrollRectToVisible(frame, animated: true)
+		self.menuScrollView.scrollRectToVisible(frame, animated: animated)
 		self.menuHighlight(index: index)
 	}
 
@@ -256,10 +267,10 @@ UIPageViewControllerDelegate {
 
 	private func settingCurrentPage() {
 		var correct = true
-		if self.currentPage >= self.dataSource?.menuViews(swipePager: self).count {
+		if self.currentPage >= self.dataSource?.menuViews(self).count {
 			correct = false
 		}
-		if self.currentPage >= self.dataSource?.viewControllers(swipePager: self).count {
+		if self.currentPage >= self.dataSource?.viewControllers(self).count {
 			correct = false
 		}
 		if correct == false {
@@ -268,7 +279,7 @@ UIPageViewControllerDelegate {
 	}
 
 	private func didMoveToPage() {
-		self.delegate?.swipePager(swipePager: self, didMoveToPage: self.currentIndex)
+		self.delegate?.swipePager(self, didMoveToPage: self.currentIndex)
 	}
 
 	// MARK: - UIPageViewControllerDataSource

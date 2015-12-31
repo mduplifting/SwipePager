@@ -107,21 +107,7 @@ UIPageViewControllerDelegate {
 			self.menuSize = menuSize
 		}
 
-		if self.menuPosition == .Top {
-			self.menuScrollView.frame = CGRect(
-				x:		0,
-				y:		0,
-				width:	CGRectGetWidth(self.frame),
-				height: self.menuSize.height
-			)
-		} else {
-			self.menuScrollView.frame = CGRect(
-				x:		0,
-				y:		CGRectGetHeight(self.frame) - self.menuSize.height,
-				width:	CGRectGetWidth(self.frame),
-				height: self.menuSize.height
-			)
-		}
+
 
 		self.layoutMenuScrollView(currentPage: self.currentPage)
 	}
@@ -159,21 +145,7 @@ UIPageViewControllerDelegate {
 	}
 
 	private func pageViewControllerReloadData() {
-		if self.menuPosition == .Top {
-			self.pageViewController.view.frame = CGRect(
-				x:		0,
-				y:		self.menuSize.height,
-				width:	CGRectGetWidth(self.frame),
-				height: CGRectGetHeight(self.frame) - CGRectGetMinY(self.frame) - self.menuSize.height
-			)
-		} else {
-			self.pageViewController.view.frame = CGRect(
-				x:		0,
-				y:		0,
-				width:	CGRectGetWidth(self.frame),
-				height: CGRectGetHeight(self.frame) - self.menuSize.height
-			)
-		}
+
 
 		if self.swipeEnabled == false {
 			for view in self.pageViewController.view.subviews {
@@ -329,6 +301,37 @@ UIPageViewControllerDelegate {
 				self.moveMenuScrollViewToCurrentIndex(self.currentIndex)
 				self.didMoveToPage()
 			}
+	}
+
+	override public func layoutSubviews() {
+		super.layoutSubviews()
+		if self.menuPosition == .Top {
+			self.pageViewController.view.frame = CGRect(
+				x:		0,
+				y:		self.menuSize.height,
+				width:	CGRectGetWidth(self.frame),
+				height: CGRectGetHeight(self.frame) - CGRectGetMinY(self.frame) - self.menuSize.height
+			)
+			self.menuScrollView.frame = CGRect(
+				x:		0,
+				y:		0,
+				width:	CGRectGetWidth(self.frame),
+				height: self.menuSize.height
+			)
+		} else {
+			self.pageViewController.view.frame = CGRect(
+				x:		0,
+				y:		0,
+				width:	CGRectGetWidth(self.frame),
+				height: CGRectGetHeight(self.frame) - self.menuSize.height
+			)
+			self.menuScrollView.frame = CGRect(
+				x:		0,
+				y:		CGRectGetHeight(self.frame) - self.menuSize.height,
+				width:	CGRectGetWidth(self.frame),
+				height: self.menuSize.height
+			)
+		}
 	}
 
 }
